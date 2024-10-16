@@ -180,6 +180,7 @@ p {
 }
 
 table {
+  max-width: 1150px;
   border-collapse: separate;
   border-spacing: 0 8px;
 }
