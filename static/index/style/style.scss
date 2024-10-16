@@ -1,1 +1,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100..900&family=Libre+Franklin:wght@100..900&family=Overpass+Mono:wght@300..700&display=swap');
+
+
+table{
+    thead{
+        td:first-child{
+            width: 27px;
+        }
+        td:nth-child(2){
+            width: 193px;
+        }
+        td:nth-child(3){
+            width: 712px;
+        }
+        td:nth-child(4){
+            width: 130px;
+        }
+    }
+}
+tr{
+    td{
+        span {
+                cursor: pointer;
+                display: block;
+                width: 24px;
+                height: 24px;
+                border-radius: 6px;
+            }
+
+            input[type="checkbox"] {
+                display: none;
+            }
+
+            input[type="checkbox"]:checked + span {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: transparent;
+                &::before {
+                    content: "";
+                    display: block;
+                    width: 12px;
+                    height: 12px;
+                    background-color: rgb(204, 213, 174);
+                    border-radius: 1rem;
+                }
+            }
+    }
+}
