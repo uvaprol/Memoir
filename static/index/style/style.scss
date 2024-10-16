@@ -35,6 +35,12 @@ table{
         tr{
             border-radius: 66px;
             td{
+                label{
+                    position: absolute;
+                    background-color: white;
+                    border-radius: 6px;
+                    left: 18px;
+                }
                 background-color: $vory;
                 padding-right: 25px;
                 span {
