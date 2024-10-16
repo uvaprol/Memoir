@@ -1,5 +1,16 @@
 @import "../../general.scss";
 
+@keyframes scale {
+    0%{
+        width: 0px;
+        height: 0px;
+    }
+    100% {
+        width: 12px;
+        height: 12px;
+    }
+}
+
 
 table{
     max-width: 1150px;
@@ -36,39 +47,31 @@ table{
         tr{
             border-radius: 66px;
             td{
+                background-color: $vory;
+                padding-right: 25px;
                 label{
                     position: absolute;
                     background-color: white;
                     border-radius: 6px;
                     left: 18px;
-                }
-                background-color: $vory;
-                padding-right: 25px;
-                span {
-                        cursor: pointer;
-                        display: block;
-                        width: 24px;
-                        height: 24px;
-                        border-radius: 6px;
-                    }
-        
-                input[type="checkbox"] {
-                    display: none;
-                }
-        
-                input[type="checkbox"]:checked + span {
+                    width: 24px;
+                    height: 24px;
+                    cursor: pointer;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    background-color: transparent;
-                    &::before {
-                        content: "";
-                        display: block;
-                        width: 12px;
-                        height: 12px;
-                        background-color: rgb(204, 213, 174);
-                        border-radius: 1rem;
-                    }
+                }
+                span{
+                    display: block;
+                    background-color: rgb(204, 213, 174);
+                    border-radius: 1rem;
+                    width: 0px;
+                    height: 0px;
+                    transition: all 500ms;
+                }
+        
+                input[type="checkbox"] {
+                    display: none;
                 }
             }
             td:last-child{

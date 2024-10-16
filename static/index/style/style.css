@@ -179,6 +179,16 @@ p {
   text-align: left;
 }
 
+@keyframes scale {
+  0% {
+    width: 0px;
+    height: 0px;
+  }
+  100% {
+    width: 12px;
+    height: 12px;
+  }
+}
 table {
   max-width: 1150px;
   border-collapse: separate;
@@ -223,30 +233,23 @@ table tbody tr td label {
   background-color: white;
   border-radius: 6px;
   left: 18px;
-}
-table tbody tr td span {
-  cursor: pointer;
-  display: block;
   width: 24px;
   height: 24px;
-  border-radius: 6px;
-}
-table tbody tr td input[type=checkbox] {
-  display: none;
-}
-table tbody tr td input[type=checkbox]:checked + span {
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent;
 }
-table tbody tr td input[type=checkbox]:checked + span::before {
-  content: "";
+table tbody tr td span {
   display: block;
-  width: 12px;
-  height: 12px;
   background-color: rgb(204, 213, 174);
   border-radius: 1rem;
+  width: 0px;
+  height: 0px;
+  transition: all 500ms;
+}
+table tbody tr td input[type=checkbox] {
+  display: none;
 }
 table tbody tr td:last-child {
   padding-right: 5px;
