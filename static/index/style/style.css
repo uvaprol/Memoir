@@ -239,7 +239,7 @@ table tbody tr td {
   padding-right: 25px;
 }
 table tbody tr td label {
-  position: absolute;
+  position: relative;
   background-color: white;
   border-radius: 6px;
   left: 18px;
@@ -251,6 +251,7 @@ table tbody tr td label {
   justify-content: center;
 }
 table tbody tr td span {
+  position: absolute;
   display: block;
   background-color: rgb(204, 213, 174);
   border-radius: 1rem;

@@ -63,7 +63,7 @@ table{
                 background-color: $vory;
                 padding-right: 25px;
                 label{
-                    position: absolute;
+                    position: relative;
                     background-color: white;
                     border-radius: 6px;
                     left: 18px;
@@ -75,6 +75,7 @@ table{
                     justify-content: center;
                 }
                 span{
+                    position: absolute;
                     display: block;
                     background-color: rgb(204, 213, 174);
                     border-radius: 1rem;
