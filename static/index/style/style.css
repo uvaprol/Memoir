@@ -189,6 +189,16 @@ p {
     height: 12px;
   }
 }
+header section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+}
+header section:first-child img {
+  max-height: 100px;
+}
+
 table {
   max-width: 1150px;
   border-collapse: separate;
@@ -274,4 +284,21 @@ table tbody tr td:last-child input::-moz-placeholder {
 }
 table tbody tr td:last-child input::placeholder {
   color: rgb(81, 81, 81);
+}
+
+main {
+  margin-top: 50px;
+  padding: 0 25px;
+  display: flex;
+  justify-content: space-between;
+}
+main nav {
+  display: flex;
+  margin-bottom: 12px;
+}
+main section:first-child button:last-child {
+  transform: scaleX(-1);
+}
+main section:last-child h2 {
+  text-align: left;
 }/*# sourceMappingURL=style.css.map */
