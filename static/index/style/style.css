@@ -312,6 +312,7 @@ table tbody tr td textarea {
   font-weight: 400;
   line-height: 22px;
   letter-spacing: 0px;
+  min-height: 22px;
 }
 table tbody tr td textarea::-webkit-scrollbar {
   display: none;
