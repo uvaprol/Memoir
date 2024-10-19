@@ -12,6 +12,10 @@
 }
 
 header{
+    button{
+        border: none;
+        background-color: $ghost;
+    }
     section{
         display: flex;
         justify-content: space-between;
@@ -23,15 +27,22 @@ header{
             max-height: 40px;
         }
     }
+    section:last-child{
+        button{
+            padding: 12px 37px;
+            border-radius: 12px;
+            background-color: $soft-brown;
+            h3{
+                color: $smoke-white;
+            }
+        }
+    }
 }
 
 table{
     max-width: 1150px;
     border-collapse: separate;
     border-spacing: 0 8px;
-    h2, h3, p{
-        text-align: left;
-    }
     td{
         border: 0 solid;
         padding: 18px 0;
@@ -61,15 +72,12 @@ table{
     tbody{
         tr{
             border-radius: 6px;
-            // height: 66px;
             td{
                 background-color: $vory;
                 padding-right: 25px;
-                
                 label{
                     position: relative;
                     left: 18px;
-                    // bottom: 21px;
                     cursor: pointer;
                     input{
                         display: none;
@@ -103,6 +111,7 @@ table{
                     }
                 }
                 textarea {
+                    cursor: pointer;
                     width: 100%;
                     border: none;
                     background-color: transparent;
@@ -135,6 +144,7 @@ table{
                     outline: none;
                     padding: 0;
                     text-align: left;
+                    cursor: pointer;
                 }
                 input::placeholder{
                     color: $ghost-grey;
@@ -146,21 +156,61 @@ table{
 
 main{
     margin-top: 50px;
-    padding: 0 25px;
     display: flex;
-    justify-content: space-between;
-    nav{
-        display: flex;
-        margin-bottom: 12px;
-    }
+    justify-content: space-evenly;
     section:first-child{
-        button:last-child{
-            transform: scaleX(-1);
+        width: 180px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        nav{
+            display: flex;
+            margin-bottom: 12px;
+            gap: 5px;
+            align-items: center;
+            h2{
+                background-color: $vory;
+                border-radius: 6px;
+                padding: 2px 6px;
+                
+            }
+            button{
+                background-color: $soft-brown;
+                border: none;
+                border-radius: 6px;
+                padding: 5px;
+                img{
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+            button:last-child{
+                transform: scaleX(-1);
+            }
         }
-    }
-    section:last-child{
-        h2{
-            text-align: left;
+        ul{
+            width: 100%;
+            margin-top: 12px;
+            background-color: $light-green;
+            border-radius: 6px;
+            padding: 14px 0;
+            li{
+                cursor: pointer;
+                padding: 0 22px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                figure{
+                    border-radius: 50%;
+                    width: 8px;
+                    height: 8px;
+                    background-color: $ghost-red;
+                    opacity: 0;
+                }
+            }
+            li:hover{
+                background-color: $soft-green;
+            }
         }
     }
 }

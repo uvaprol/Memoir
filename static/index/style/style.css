@@ -143,7 +143,7 @@ h1 {
   font-weight: 100;
   line-height: 44px;
   letter-spacing: 0px;
-  text-align: center;
+  text-align: left;
 }
 
 h2 {
@@ -154,7 +154,7 @@ h2 {
   font-weight: 300;
   line-height: 30px;
   letter-spacing: 0px;
-  text-align: center;
+  text-align: left;
 }
 
 h3 {
@@ -165,7 +165,7 @@ h3 {
   font-weight: 400;
   line-height: 22px;
   letter-spacing: 0px;
-  text-align: center;
+  text-align: left;
 }
 
 p {
@@ -179,6 +179,10 @@ p {
   text-align: left;
 }
 
+button {
+  cursor: pointer;
+}
+
 @keyframes scale {
   0% {
     width: 0px;
@@ -189,6 +193,10 @@ p {
     height: 12px;
   }
 }
+header button {
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+}
 header section {
   display: flex;
   justify-content: space-between;
@@ -198,14 +206,19 @@ header section {
 header section:first-child img {
   max-height: 40px;
 }
+header section:last-child button {
+  padding: 12px 37px;
+  border-radius: 12px;
+  background-color: rgb(212, 163, 115);
+}
+header section:last-child button h3 {
+  color: rgb(245, 245, 245);
+}
 
 table {
   max-width: 1150px;
   border-collapse: separate;
   border-spacing: 0 8px;
-}
-table h2, table h3, table p {
-  text-align: left;
 }
 table td {
   border: 0 solid;
@@ -276,6 +289,7 @@ table tbody tr td label input:checked ~ span::after {
   transform: translate(-50%, -50%) scale(1);
 }
 table tbody tr td textarea {
+  cursor: pointer;
   width: 100%;
   border: none;
   background-color: transparent;
@@ -308,6 +322,7 @@ table tbody tr td:last-child input {
   outline: none;
   padding: 0;
   text-align: left;
+  cursor: pointer;
 }
 table tbody tr td:last-child input::-moz-placeholder {
   color: rgb(81, 81, 81);
@@ -318,17 +333,60 @@ table tbody tr td:last-child input::placeholder {
 
 main {
   margin-top: 50px;
-  padding: 0 25px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
-main nav {
+main section:first-child {
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+main section:first-child nav {
   display: flex;
   margin-bottom: 12px;
+  gap: 5px;
+  align-items: center;
 }
-main section:first-child button:last-child {
+main section:first-child nav h2 {
+  background-color: rgb(254, 250, 224);
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+main section:first-child nav button {
+  background-color: rgb(212, 163, 115);
+  border: none;
+  border-radius: 6px;
+  padding: 5px;
+}
+main section:first-child nav button img {
+  width: 20px;
+  height: 20px;
+}
+main section:first-child nav button:last-child {
   transform: scaleX(-1);
 }
-main section:last-child h2 {
-  text-align: left;
+main section:first-child ul {
+  width: 100%;
+  margin-top: 12px;
+  background-color: rgb(233, 237, 201);
+  border-radius: 6px;
+  padding: 14px 0;
+}
+main section:first-child ul li {
+  cursor: pointer;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+main section:first-child ul li figure {
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  background-color: rgb(220, 105, 105);
+  opacity: 0;
+}
+main section:first-child ul li:hover {
+  background-color: rgb(204, 213, 174);
 }/*# sourceMappingURL=style.css.map */

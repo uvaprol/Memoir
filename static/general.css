@@ -143,7 +143,7 @@ h1 {
   font-weight: 100;
   line-height: 44px;
   letter-spacing: 0px;
-  text-align: center;
+  text-align: left;
 }
 
 h2 {
@@ -154,7 +154,7 @@ h2 {
   font-weight: 300;
   line-height: 30px;
   letter-spacing: 0px;
-  text-align: center;
+  text-align: left;
 }
 
 h3 {
@@ -165,7 +165,7 @@ h3 {
   font-weight: 400;
   line-height: 22px;
   letter-spacing: 0px;
-  text-align: center;
+  text-align: left;
 }
 
 p {
@@ -177,4 +177,8 @@ p {
   line-height: 19px;
   letter-spacing: 0px;
   text-align: left;
+}
+
+button {
+  cursor: pointer;
 }/*# sourceMappingURL=general.css.map */
