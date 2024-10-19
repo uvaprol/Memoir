@@ -35,6 +35,7 @@ table{
     td{
         border: 0 solid;
         padding: 18px 0;
+        vertical-align: top;
     }
     td:first-child{
         width: 27px;
@@ -45,6 +46,7 @@ table{
     }
     td:nth-child(3){
         width: 715px;
+        vertical-align: middle;
     }
     td:last-child{
         width: 150px;
@@ -58,14 +60,16 @@ table{
     }
     tbody{
         tr{
-            border-radius: 66px;
+            border-radius: 6px;
+            // height: 66px;
             td{
                 background-color: $vory;
                 padding-right: 25px;
+                
                 label{
                     position: relative;
                     left: 18px;
-                    bottom: 21px;
+                    // bottom: 21px;
                     cursor: pointer;
                     input{
                         display: none;
@@ -97,6 +101,22 @@ table{
                         height: 12px;
                         transform: translate(-50%, -50%) scale(1);
                     }
+                }
+                textarea {
+                    width: 100%;
+                    border: none;
+                    background-color: transparent;
+                    resize: none;
+                    max-height: 150px;
+                    color: $soft-black;
+                    font-family: Exo 2;
+                    font-size: 18px;
+                    font-weight: 400;
+                    line-height: 22px;
+                    letter-spacing: 0px;
+                }
+                textarea::-webkit-scrollbar{
+                    display: none;
                 }
             }
             td:last-child{
