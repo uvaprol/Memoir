@@ -205,6 +205,11 @@ body header, body main, body footer {
     height: 12px;
   }
 }
+header {
+  background-color: rgb(245, 245, 245);
+  z-index: 1;
+  position: fixed;
+}
 header button {
   border: none;
   background-color: rgba(0, 0, 0, 0);
@@ -350,7 +355,7 @@ table tbody tr td:last-child input::placeholder {
 }
 
 main {
-  margin-top: 50px;
+  margin-top: 230px;
   display: flex;
   justify-content: space-evenly;
 }
@@ -361,6 +366,7 @@ main section:first-child {
   align-items: center;
 }
 main section:first-child nav {
+  position: fixed;
   display: flex;
   margin-bottom: 12px;
   gap: 5px;
@@ -385,8 +391,9 @@ main section:first-child nav button:last-child {
   transform: scaleX(-1);
 }
 main section:first-child ul {
-  width: 100%;
-  margin-top: 12px;
+  position: fixed;
+  width: 180px;
+  margin-top: 56px;
   background-color: rgb(233, 237, 201);
   border-radius: 6px;
   padding: 14px 0;
@@ -408,8 +415,37 @@ main section:first-child ul li figure {
 main section:first-child ul li:hover {
   background-color: rgb(204, 213, 174);
 }
+main section:last-child h2 {
+  top: 230px;
+  width: 1150px;
+  position: fixed;
+  background-color: rgb(245, 245, 245);
+  padding: 13px 0;
+  z-index: 1;
+}
+main section:last-child table {
+  margin-top: 48px;
+}
+main section:last-child table h2 {
+  height: auto;
+  padding: 0;
+  width: -moz-max-content;
+  width: max-content;
+  background-color: rgba(0, 0, 0, 0);
+  position: unset;
+}
 
 footer {
   display: flex;
   justify-content: center;
+}
+
+body div {
+  width: 100%;
+  height: 60px;
+  background-color: blue;
+  position: fixed;
+  top: 170px;
+  background-color: rgb(245, 245, 245);
+  z-index: 1;
 }/*# sourceMappingURL=style.css.map */
