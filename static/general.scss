@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100..900&family=Libre+Franklin:wght@100..900&family=Overpass+Mono:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Overpass+Mono:wght@300..700&display=swap');
 @import "_reset";
 
 $soft-green: rgb(204, 213, 174);
@@ -14,7 +14,7 @@ $ghost: #00000000;
 h1{
     /* Заголовок */
     color: $soft-black;
-    font-family: Libre Franklin;
+    font-family: "Libre Franklin";
     font-size: 36px;
     font-weight: 100;
     line-height: 44px;
@@ -25,7 +25,7 @@ h1{
 h2{
     /* Подзаголовок */
     color: $soft-black;
-    font-family: Overpass Mono;
+    font-family: "Overpass Mono";
     font-size: 24px;
     font-weight: 300;
     line-height: 30px;
@@ -36,7 +36,7 @@ h2{
 h3{
     /* Основой текст для абзацев */
     color: $soft-black;
-    font-family: Exo 2;
+    font-family: "Exo 2";
     font-size: 18px;
     font-weight: 400;
     line-height: 22px;
@@ -47,7 +47,7 @@ h3{
 p{
     /* Маленький текст */
     color: $ghost-grey;
-    font-family: Exo 2;
+    font-family: "Exo 2";
     font-size: 16px;
     font-weight: 400;
     line-height: 19px;

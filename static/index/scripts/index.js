@@ -20,10 +20,10 @@ function box_checked(id){
 function areaAutoResize(){
     const textarea = document.getElementsByTagName('textarea');
     for (area of textarea){
-        area.style.height = area.scrollHeight / 2 + 'px';
+        area.style.height = area.scrollHeight - 22 + 'px';
         area.addEventListener('input', function () {
             this.style.height = 'auto';
-            this.style.height = `${this.scrollHeight}px`;
+            this.style.height = `${this.scrollHeight - 18}px`;
           });
     }
 }
