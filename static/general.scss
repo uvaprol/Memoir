@@ -59,3 +59,14 @@ p{
 button{
     cursor: pointer;
 }
+
+body{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    header, main, footer{
+        max-width: 1440px;
+        width: 100%;
+    }
+}

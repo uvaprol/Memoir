@@ -181,4 +181,15 @@ p {
 
 button {
   cursor: pointer;
+}
+
+body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body header, body main, body footer {
+  max-width: 1440px;
+  width: 100%;
 }/*# sourceMappingURL=general.css.map */
