@@ -196,7 +196,7 @@ header section {
   padding: 25px;
 }
 header section:first-child img {
-  max-height: 100px;
+  max-height: 40px;
 }
 
 table {
@@ -240,27 +240,39 @@ table tbody tr td {
 }
 table tbody tr td label {
   position: relative;
+  left: 18px;
+  bottom: 21px;
+  cursor: pointer;
+}
+table tbody tr td label input {
+  display: none;
+}
+table tbody tr td label span {
+  position: absolute;
+  height: 25px;
+  width: 25px;
   background-color: white;
   border-radius: 6px;
-  left: 18px;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-table tbody tr td span {
+table tbody tr td label input:checked ~ span {
+  background-color: white;
+}
+table tbody tr td label span::after {
+  content: "";
   position: absolute;
-  display: block;
-  background-color: rgb(204, 213, 174);
-  border-radius: 1rem;
-  width: 0px;
-  height: 0px;
-  transition: all 500ms;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgb(204, 213, 174);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: all 0.5s ease;
 }
-table tbody tr td input[type=checkbox] {
-  display: none;
+table tbody tr td label input:checked ~ span::after {
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%) scale(1);
 }
 table tbody tr td:last-child {
   padding-right: 5px;

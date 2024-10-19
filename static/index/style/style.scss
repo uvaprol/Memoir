@@ -20,7 +20,7 @@ header{
     }
     section:first-child{
         img{
-            max-height: 100px;
+            max-height: 40px;
         }
     }
 }
@@ -64,28 +64,39 @@ table{
                 padding-right: 25px;
                 label{
                     position: relative;
-                    background-color: white;
-                    border-radius: 6px;
                     left: 18px;
-                    width: 24px;
-                    height: 24px;
+                    bottom: 21px;
                     cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                span{
-                    position: absolute;
-                    display: block;
-                    background-color: rgb(204, 213, 174);
-                    border-radius: 1rem;
-                    width: 0px;
-                    height: 0px;
-                    transition: all 500ms;
-                }
-        
-                input[type="checkbox"] {
-                    display: none;
+                    input{
+                        display: none;
+                    }
+                    span{
+                        position: absolute;
+                        height: 25px;
+                        width: 25px;
+                        background-color: white;
+                        border-radius: 6px;
+                    }
+                    input:checked ~ span {
+                        background-color: white;
+                    }
+                    span::after {
+                        content: "";
+                        position: absolute;
+                        width: 0;
+                        height: 0;
+                        border-radius: 50%;
+                        background: $soft-green;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%) scale(0);
+                        transition: all 0.5s ease;
+                    }
+                    input:checked ~ span::after {
+                        width: 12px;
+                        height: 12px;
+                        transform: translate(-50%, -50%) scale(1);
+                    }
                 }
             }
             td:last-child{
@@ -133,3 +144,16 @@ main{
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
