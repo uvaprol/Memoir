@@ -184,6 +184,7 @@ button {
 }
 
 body {
+  background-color: rgb(245, 245, 245);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -217,6 +218,9 @@ header section {
 header section:first-child img {
   max-height: 40px;
 }
+header section:last-child {
+  padding-bottom: 5px;
+}
 header section:last-child button {
   padding: 12px 37px;
   border-radius: 12px;
@@ -227,6 +231,7 @@ header section:last-child button h3 {
 }
 
 table {
+  margin-top: 20px;
   max-width: 1150px;
   border-collapse: separate;
   border-spacing: 0 8px;
@@ -313,6 +318,7 @@ table tbody tr td textarea {
   line-height: 22px;
   letter-spacing: 0px;
   min-height: 22px;
+  outline: none;
 }
 table tbody tr td textarea::-webkit-scrollbar {
   display: none;
@@ -401,4 +407,9 @@ main section:first-child ul li figure {
 }
 main section:first-child ul li:hover {
   background-color: rgb(204, 213, 174);
+}
+
+footer {
+  display: flex;
+  justify-content: center;
 }/*# sourceMappingURL=style.css.map */
