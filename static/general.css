@@ -181,6 +181,7 @@ p {
 
 button {
   cursor: pointer;
+  border: none;
 }
 
 body {
@@ -193,4 +194,9 @@ body {
 body header, body main, body footer {
   max-width: 1440px;
   width: 100%;
+}
+
+input, textarea {
+  border: none;
+  outline: none;
 }/*# sourceMappingURL=general.css.map */

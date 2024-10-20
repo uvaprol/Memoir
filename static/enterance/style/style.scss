@@ -1,0 +1,40 @@
+@import "../../general.scss";
+
+img{
+    max-width: 200px;
+    position: absolute;
+    left: calc(100% - 1440px);
+}
+section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-image: url(../../img/bgWawe.svg);
+    background-size: cover;
+    width: 100%;
+    max-width: 1440px;
+    input{
+        width: 265px;
+        height: 45px;
+        border-radius: 6px;
+        background-color: $vory;
+        margin-top: 16px;
+    }
+    a{
+        margin-top: 4px;
+        text-decoration: none;
+    }
+    button{
+        margin-top: 53px;
+        width: 265px;
+        height: 35px;
+        background-color: $soft-brown;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        padding: 10px 0;
+    }
+}
