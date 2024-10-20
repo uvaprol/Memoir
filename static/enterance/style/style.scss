@@ -3,7 +3,7 @@
 img{
     max-width: 200px;
     position: absolute;
-    left: calc(100% - 1440px);
+    left: calc((100% - 1440px)/2);
 }
 section{
     display: flex;
@@ -21,6 +21,13 @@ section{
         border-radius: 6px;
         background-color: $vory;
         margin-top: 16px;
+        color: rgb(81, 81, 81);
+        font-family: "Exo 2";
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 22px;
+        letter-spacing: 0px;
+        text-align: left;
     }
     a{
         margin-top: 4px;

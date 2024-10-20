@@ -204,7 +204,7 @@ input, textarea {
 img {
   max-width: 200px;
   position: absolute;
-  left: calc(100% - 1440px);
+  left: calc((100% - 1440px) / 2);
 }
 
 section {
@@ -224,6 +224,13 @@ section input {
   border-radius: 6px;
   background-color: rgb(254, 250, 224);
   margin-top: 16px;
+  color: rgb(81, 81, 81);
+  font-family: "Exo 2";
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0px;
+  text-align: left;
 }
 section a {
   margin-top: 4px;

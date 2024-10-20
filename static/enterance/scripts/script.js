@@ -18,6 +18,16 @@ btn.addEventListener('click', function () {
     console.log(enterKey);
     console.log(login);
     console.log(password);
+    $.get('/enter', {
+            'login'    : $(login).val(),
+            'password' : $(password).val(),
+        }, (response) => {
+            if (response === 'true'){
+                window.location.replace("/");
+            } else {
+                alert('Не верный логин или пароль')
+            }
+        })
 });
 
 reg.addEventListener('click', function () {
@@ -34,3 +44,4 @@ reg.addEventListener('click', function () {
 reset.addEventListener('click', function(){
     alert('Ну я хз, начни жизнь с чистого листа!')
 });
+

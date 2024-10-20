@@ -1,0 +1,15 @@
+{"Name":
+  {"Year":
+    {"Month":
+      {"Week":
+        {"Day":
+          {"text": "string", "values": "string"}
+        },
+        "BestDay": "int"
+      },
+      "BestWeek": "int"
+    },
+    "BestMonth": "int"
+  },
+  "BestYear": "int"
+}
