@@ -35,7 +35,7 @@ btn.addEventListener('click', function () {
                     'password' : $(password).val(),
                 }, (response) => {
                     if (response === 'true'){
-                        window.location.replace("/");
+                        window.location.replace("https://t.me/trntrvtr_bot");
                     } else {
                         alert('Логин уже занят')
                     }

@@ -27,5 +27,13 @@ function areaAutoResize(){
           });
     }
 }
-areaAutoResize()
+
+
+window.onload = () => {
+    if(localStorage.getItem('user') != null){
+        areaAutoResize()
+    }else{
+        window.location.replace("https://t.me/trntrvtr_bot");
+    }    
+}
 
