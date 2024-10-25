@@ -6,11 +6,11 @@ import json
 DEV_MODE = False
 app = Flask(__name__)
 def load_DB():
-    with open('DB.json', 'r') as json_file:
+    with open('DATABASE/DB.json', 'r') as json_file:
         data = json.load(json_file)
     return data
 def get_users():
-    with open('LOGINS.json', 'r') as json_file:
+    with open('DATABASE/LOGINS.json', 'r') as json_file:
         users = json.load(json_file)
     return users
 # print(load_DB()['uvaprol']['Password'])

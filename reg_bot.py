@@ -23,14 +23,14 @@ WELCOME_MSG = 'Привет, я твой бот асистент!\n' \
 
 
 
-with open('USERS.json', 'r') as json_file:
+with open('DATABASE/USERS.json', 'r') as json_file:
     USERS = json.load(json_file)
-with open('LOGINS.json', 'r') as json_file:
+with open('DATABASE/LOGINS.json', 'r') as json_file:
     LOGINS = json.load(json_file)
 def save_DATABASE(U_data, L_data):
-    with open('USERS.json', 'w') as json_file:
+    with open('DATABASE/USERS.json', 'w') as json_file:
         json.dump(U_data, json_file)
-    with open('LOGINS.json', 'w') as json_file:
+    with open('DATABASE/LOGINS.json', 'w') as json_file:
         json.dump(L_data, json_file)
 
 
