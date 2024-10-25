@@ -4,6 +4,17 @@ import json
 import re
 import requests
 
+def save_DATABASE(U_data, L_data):
+    payload = {
+        'U_data': U_data,
+        'L_data': L_data,
+        'password': API_PASSWORD
+    }
+    requests.post(f'{API_URL}/save_data_users', json=payload)
+def user_del(u):
+    return
+
+
 WELCOME_MSG = 'Привет, я твой бот асистент!\n' \
               'Я буду следить за твоей учетной записью.\n' \
               'И помогать тебе с доступом к ней.\n' \
@@ -23,21 +34,18 @@ WELCOME_MSG = 'Привет, я твой бот асистент!\n' \
               'Для связи с поддержкой введите\n' \
               '/help'
 
-
-def save_DATABASE(U_data, L_data):
-    response = requests.get(f'{API_URL}/save_data_users?U_data={U_data}&L_data={L_data}&password={API_PASSWORD}')
-    if response.status_code != 200:
-        print(False)
-
-
-response = requests.get(f'{API_URL}/send_data_users?password={API_PASSWORD}')
-USERS, LOGINS = eval(response.text)
-save_DATABASE(USERS, LOGINS)
-
-def user_del(u):
-    return
-
-
+#----------------------API CONECT----------------------
+payload = {
+        'password': API_PASSWORD
+    }
+response = requests.post(f'{API_URL}/send_data_users', json=payload)
+if response.status_code == 200:
+    data = eval(response.text)
+    USERS = data.get('U_data')
+    LOGINS = data.get('L_data')
+else:
+    print('Ошибка:', response.status_code, response.text)
+#-------------------------------------------------------
 
 bot = telebot.TeleBot(API_KEY)
 try:
