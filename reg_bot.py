@@ -1,6 +1,8 @@
 import telebot
 from seting import *
 import json
+import re
+import requests
 
 WELCOME_MSG = 'Привет, я твой бот асистент!\n' \
               'Я буду следить за твоей учетной записью.\n' \
@@ -22,17 +24,15 @@ WELCOME_MSG = 'Привет, я твой бот асистент!\n' \
               '/help'
 
 
-
-with open('DATABASE/USERS.json', 'r') as json_file:
-    USERS = json.load(json_file)
-with open('DATABASE/LOGINS.json', 'r') as json_file:
-    LOGINS = json.load(json_file)
 def save_DATABASE(U_data, L_data):
-    with open('DATABASE/USERS.json', 'w') as json_file:
-        json.dump(U_data, json_file)
-    with open('DATABASE/LOGINS.json', 'w') as json_file:
-        json.dump(L_data, json_file)
+    response = requests.get(f'{API_URL}/save_data_users?U_data={U_data}&L_data={L_data}&password={API_PASSWORD}')
+    if response.status_code != 200:
+        print(False)
 
+
+response = requests.get(f'{API_URL}/send_data_users?password={API_PASSWORD}')
+USERS, LOGINS = eval(response.text)
+save_DATABASE(USERS, LOGINS)
 
 def user_del(u):
     return
@@ -49,11 +49,14 @@ try:
         user = str(user)
 
         # ---------------------ADMIN----------------------------
-        if int(user) in ADMINS_ID and text == ADMINS_COMMAND[0]:
-            raise Exception('Finish')
-        if int(user) in ADMINS_ID and text == ADMINS_COMMAND[1]:
-            USERS, LOGINS = {}, {}
-            save_DATABASE(USERS, LOGINS)
+        if int(user) in ADMINS_ID:
+            if text == ADMINS_COMMAND[0]:
+                raise Exception('Finish')
+            elif text == ADMINS_COMMAND[1]:
+                USERS, LOGINS = {}, {}
+                save_DATABASE(USERS, LOGINS)
+            elif re.match(r'/\d', text) != None:
+                pass
 
         # ---------------------WELCOME--------------------------
         if USERS.get(user) == None:
@@ -84,6 +87,7 @@ try:
                 REG_SRC = REG_SRC.replace('{login}', USERS[user]['login'])
                 REG_SRC = REG_SRC.replace('{password}', USERS[user]['password'])
                 bot.send_message(message.from_user.id, REG_SRC)
+                print(LOGINS)
                 save_DATABASE(USERS, LOGINS)
             elif USERS[user].get('login') == None:
                 bot.send_message(message.from_user.id, 'Создайте логин\n/set_login')
