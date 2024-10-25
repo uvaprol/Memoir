@@ -26,6 +26,7 @@ WELCOME_MSG = 'Привет, я твой бот асистент!\n' \
 with open('USERS.json', 'r') as json_file:
     USERS = json.load(json_file)
 
+
 def user_del(u):
     return
 
@@ -35,43 +36,53 @@ bot = telebot.TeleBot(API_KEY)
 try:
     @bot.message_handler(content_types=['text'])
     def user_greeting(message):
-        global REG_SRC, USERS, BOT_RUN
+        global REG_SRC, USERS
         text = message.text
         user = message.from_user.id
-        if user in ADMINS_ID and text == ADMINS_COMMAND[0]:
+        user = str(user)
+        if int(user) in ADMINS_ID and text == ADMINS_COMMAND[0]:
+            print(USERS)
             raise Exception('Finish')
+        if USERS.get(user) == None:
+            USERS[user] = {'action': ''}
         if text == '/start':
             bot.send_message(message.from_user.id, WELCOME_MSG)
-            USERS[user] = {'action': ''}
+            USERS[user]['action'] = ''
         elif text == '/del':
             bot.send_message(message.from_user.id, 'Вы точно хотите удалить свою учетную запись\n/y\n/n')
-            USERS[user].update({'action': 'del'})
+            USERS[user]['action'] = 'del'
         elif text == '/set_login':
-            USERS[user].update({'action': 'set_login'})
-            bot.send_message(message.from_user.id, 'Введите логин')
+            if USERS[user].get('login') != None:
+                bot.send_message(message.from_user.id, 'Вы можете изменять только пароль\n'
+                                                       '/set_password\n'
+                                                       'Если хотите удалить свою запись воспользуйтесь\n'
+                                                       '/del')
+            else:
+                USERS[user]['action'] = 'set_login'
+                bot.send_message(message.from_user.id, 'Введите логин')
         elif text == '/set_password':
-            USERS[user].update({'action': 'set_password'})
+            USERS[user]['action'] = 'set_password'
             bot.send_message(message.from_user.id, 'Введите пароль')
         elif text == '/regestration':
             if USERS[user].get('login') != None and USERS[user].get('password') != None:
-                USERS[user].update({'action': ''})
+                USERS[user]['action'] = ''
                 REG_SRC = REG_SRC.replace('{login}', USERS[user]['login'])
                 REG_SRC = REG_SRC.replace('{password}', USERS[user]['password'])
                 bot.send_message(message.from_user.id, REG_SRC)
-            elif USERS[user].get('login') != None:
+            elif USERS[user].get('login') == None:
                 bot.send_message(message.from_user.id, 'Создайте логин\n/set_login')
             else:
                 bot.send_message(message.from_user.id, 'Создайте пароль\n/set_password')
         elif text == '/help':
-            USERS[user].update({'action': 'help'})
+            USERS[user]['action'] = 'help'
             bot.send_message(message.from_user.id, 'Введите сообщение')
         elif text == '/exit':
-            USERS[user].update({'action': 'help'})
+            USERS[user]['action'] = 'help'
             bot.send_message(message.from_user.id, 'Чтобы прочесть инструкцию введите\n/start')
         elif USERS[user]['action'] == 'del' and text.find('y') != -1:
             user_del(user)
         elif USERS[user]['action'] == 'del' and text.find('n') != -1:
-            USERS[user].update({'action': ''})
+            USERS[user]['action'] = ''
         elif USERS[user]['action'] == 'help':
             for i in ADMINS_ID:
                 bot.send_message(i, f'/{user}\n{text}')
@@ -79,22 +90,23 @@ try:
                                                    '\nдля выхода из режима диалога с оператором введите'
                                                    '\n/exit')
         elif USERS[user]['action'] == 'set_login':
-            if USERS[user].get('login') != None:
+            if text in USERS.get('LOGINS'):
                 bot.send_message(message.from_user.id, 'Этот логин уже занят')
             else:
-                USERS[user].update({'login': text})
-                if USERS[user].get('login') != None and USERS[user].get('password') != None:
+                USERS[user]['login'] = text
+                USERS['LOGINS'].update({text: None})
+                if USERS[user].get('password') != None:
                     bot.send_message(message.from_user.id, 'Теперь зарегистрируйте пользователя\n/regestration')
                 else:
                     bot.send_message(message.from_user.id, 'Создайте пароль\n/set_password')
-                    USERS[user].update({'action': ''})
+                    USERS[user]['action'] = ''
         elif USERS[user]['action'] == 'set_password':
-            USERS[user].update({'password': text})
-            if USERS[user].get('login') != None and USERS[user].get('password') != None:
+            USERS[user]['password'] = text
+            if USERS[user].get('login') != None:
                 bot.send_message(message.from_user.id, 'Теперь зарегистрируйте пользователя\n/regestration')
             else:
                 bot.send_message(message.from_user.id, 'Создайте логин\n/set_login')
-                USERS[user].update({'action': ''})
+                USERS[user]['action'] = ''
     bot.polling(none_stop=True, interval=0)
 
 except:
