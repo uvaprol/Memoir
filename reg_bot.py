@@ -2,8 +2,6 @@ import telebot
 from seting import *
 import json
 
-BOT_RUN = True
-
 WELCOME_MSG = 'Привет, я твой бот асистент!\n' \
               'Я буду следить за твоей учетной записью.\n' \
               'И помогать тебе с доступом к ней.\n' \
