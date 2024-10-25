@@ -42,24 +42,27 @@ def user_del(u):
 bot = telebot.TeleBot(API_KEY)
 try:
     @bot.message_handler(content_types=['text'])
-    def user_greeting(message):
+    def bot_comand(message):
         global REG_SRC, USERS, LOGINS
         text = message.text
         user = message.from_user.id
         user = str(user)
+
+        # ---------------------ADMIN----------------------------
         if int(user) in ADMINS_ID and text == ADMINS_COMMAND[0]:
             raise Exception('Finish')
         if int(user) in ADMINS_ID and text == ADMINS_COMMAND[1]:
             USERS, LOGINS = {}, {}
             save_DATABASE(USERS, LOGINS)
-        elif USERS.get(user) == None:
+
+        # ---------------------WELCOME--------------------------
+        if USERS.get(user) == None:
             USERS[user] = {'action': ''}
         elif text == '/start':
             bot.send_message(message.from_user.id, WELCOME_MSG)
             USERS[user]['action'] = ''
-        elif text == '/del':
-            bot.send_message(message.from_user.id, 'Вы точно хотите удалить свою учетную запись\n/y\n/n')
-            USERS[user]['action'] = 'del'
+
+        # ---------------------COMANDS---------------------------
         elif text == '/set_login':
             if USERS[user].get('login') != None:
                 bot.send_message(message.from_user.id, 'Вы можете изменять только пароль\n'
@@ -69,6 +72,9 @@ try:
             else:
                 USERS[user]['action'] = 'set_login'
                 bot.send_message(message.from_user.id, 'Введите логин')
+        elif text == '/del':
+            bot.send_message(message.from_user.id, 'Вы точно хотите удалить свою учетную запись\n/y\n/n')
+            USERS[user]['action'] = 'del'
         elif text == '/set_password':
             USERS[user]['action'] = 'set_password'
             bot.send_message(message.from_user.id, 'Введите пароль')
@@ -87,18 +93,21 @@ try:
             USERS[user]['action'] = 'help'
             bot.send_message(message.from_user.id, 'Введите сообщение')
         elif text == '/exit':
-            USERS[user]['action'] = 'help'
-            bot.send_message(message.from_user.id, 'Чтобы прочесть инструкцию введите\n/start')
-        elif USERS[user]['action'] == 'del' and text.find('y') != -1:
-            user_del(user)
-        elif USERS[user]['action'] == 'del' and text.find('n') != -1:
             USERS[user]['action'] = ''
+            bot.send_message(message.from_user.id, 'Чтобы прочесть инструкцию введите\n/start')
+
+        # -----------------------ACTIONS------------------------
         elif USERS[user]['action'] == 'help':
             for i in ADMINS_ID:
                 bot.send_message(i, f'/{user}\n{text}')
             bot.send_message(message.from_user.id, 'Ваше сообщение отправлено оператор свяжется с вами'
                                                    '\nдля выхода из режима диалога с оператором введите'
-                                                   '\n/exit')
+                                                   '\n/exit'
+                                                   '\nили любую другую команду')
+        elif USERS[user]['action'] == 'del' and text.find('y') != -1:
+            user_del(user)
+        elif USERS[user]['action'] == 'del' and text.find('n') != -1:
+            USERS[user]['action'] = ''
         elif USERS[user]['action'] == 'set_login':
             if text in LOGINS:
                 bot.send_message(message.from_user.id, 'Этот логин уже занят')
@@ -118,6 +127,7 @@ try:
             else:
                 bot.send_message(message.from_user.id, 'Создайте логин\n/set_login')
                 USERS[user]['action'] = ''
+
     bot.polling(none_stop=True, interval=0)
 
 except:
