@@ -9,7 +9,10 @@ def load_DB():
     with open('DB.json', 'r') as json_file:
         data = json.load(json_file)
     return data
-
+def get_users():
+    with open('LOGINS.json', 'r') as json_file:
+        users = json.load(json_file)
+    return users
 # print(load_DB()['uvaprol']['Password'])
 @app.route('/')
 def main_render():
@@ -21,11 +24,12 @@ def Enter_or_Registration():
 
 @app.route('/enter')
 def user_check():
+
     login = request.args['login']
     password = request.args['password']
-    users = load_DB()
+    users = get_users()
     try:
-        if users[login]['Password'] == password:
+        if users[login] == password:
             return 'true'
         return 'false'
     except:

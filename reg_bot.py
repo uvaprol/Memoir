@@ -25,6 +25,13 @@ WELCOME_MSG = 'Привет, я твой бот асистент!\n' \
 
 with open('USERS.json', 'r') as json_file:
     USERS = json.load(json_file)
+with open('LOGINS.json', 'r') as json_file:
+    LOGINS = json.load(json_file)
+def save_DATABASE(U_data, L_data):
+    with open('USERS.json', 'w') as json_file:
+        json.dump(U_data, json_file)
+    with open('LOGINS.json', 'w') as json_file:
+        json.dump(L_data, json_file)
 
 
 def user_del(u):
@@ -36,16 +43,18 @@ bot = telebot.TeleBot(API_KEY)
 try:
     @bot.message_handler(content_types=['text'])
     def user_greeting(message):
-        global REG_SRC, USERS
+        global REG_SRC, USERS, LOGINS
         text = message.text
         user = message.from_user.id
         user = str(user)
         if int(user) in ADMINS_ID and text == ADMINS_COMMAND[0]:
-            print(USERS)
             raise Exception('Finish')
-        if USERS.get(user) == None:
+        if int(user) in ADMINS_ID and text == ADMINS_COMMAND[1]:
+            USERS, LOGINS = {}, {}
+            save_DATABASE(USERS, LOGINS)
+        elif USERS.get(user) == None:
             USERS[user] = {'action': ''}
-        if text == '/start':
+        elif text == '/start':
             bot.send_message(message.from_user.id, WELCOME_MSG)
             USERS[user]['action'] = ''
         elif text == '/del':
@@ -69,6 +78,7 @@ try:
                 REG_SRC = REG_SRC.replace('{login}', USERS[user]['login'])
                 REG_SRC = REG_SRC.replace('{password}', USERS[user]['password'])
                 bot.send_message(message.from_user.id, REG_SRC)
+                save_DATABASE(USERS, LOGINS)
             elif USERS[user].get('login') == None:
                 bot.send_message(message.from_user.id, 'Создайте логин\n/set_login')
             else:
@@ -90,11 +100,11 @@ try:
                                                    '\nдля выхода из режима диалога с оператором введите'
                                                    '\n/exit')
         elif USERS[user]['action'] == 'set_login':
-            if text in USERS.get('LOGINS'):
+            if text in LOGINS:
                 bot.send_message(message.from_user.id, 'Этот логин уже занят')
             else:
                 USERS[user]['login'] = text
-                USERS['LOGINS'].update({text: None})
+                LOGINS.update({text: USERS[user].get('password')})
                 if USERS[user].get('password') != None:
                     bot.send_message(message.from_user.id, 'Теперь зарегистрируйте пользователя\n/regestration')
                 else:
@@ -103,6 +113,7 @@ try:
         elif USERS[user]['action'] == 'set_password':
             USERS[user]['password'] = text
             if USERS[user].get('login') != None:
+                LOGINS.update({USERS[user].get('login'): USERS[user].get('password')})
                 bot.send_message(message.from_user.id, 'Теперь зарегистрируйте пользователя\n/regestration')
             else:
                 bot.send_message(message.from_user.id, 'Создайте логин\n/set_login')
@@ -110,5 +121,4 @@ try:
     bot.polling(none_stop=True, interval=0)
 
 except:
-    with open('USERS.json', 'w') as json_file:
-        json.dump(USERS, json_file)
+    save_DATABASE(USERS, LOGINS)
