@@ -20,7 +20,12 @@ function box_checked(id){
 function areaAutoResize(){
     const textarea = document.getElementsByTagName('textarea');
     for (area of textarea){
-        area.style.height = area.scrollHeight - 22 + 'px';
+        if (area.scrollHeight === 48){
+            area.style.height = '24px';
+        }
+        else{
+            area.style.height = `${area.scrollHeight}px`;
+        }
         area.addEventListener('input', function () {
             this.style.height = 'auto';
             this.style.height = `${this.scrollHeight - 18}px`;
@@ -30,9 +35,8 @@ function areaAutoResize(){
 
 
 window.onload = () => {
-    if(localStorage.getItem('user') != null){
-        areaAutoResize()
-    }else{
+    areaAutoResize()
+    if(localStorage.getItem('user') === null){
         // window.location.replace("https://t.me/trntrvtr_bot");
     }    
 }
