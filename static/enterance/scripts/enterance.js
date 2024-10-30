@@ -12,16 +12,21 @@ const regText = reg.getElementsByTagName('p')[0]
 const btnText = btn.getElementsByTagName('h2')[0]
 
 btn.addEventListener('click', function () {
-    $.get('/enter', {
-            'login'    : $(login).val(),
-            'password' : $(password).val(),
-        }, (response) => {
-            if (response === 'true'){
-                window.location.replace("/");
-            } else {
-                alert('Не верный логин или пароль')
-            }
-        })
+    $.ajax({
+        url: '/enter', // URL вашего API
+        type: 'POST',
+        data: {
+            'login': $(login).val(),
+            'password': $(password).val()
+        },
+        success: function(response) {
+             window.location.replace("/memoir");
+        },
+        error: function(xhr, status, error) {
+            alert('Не верный логин или пароль')
+            console.error("Ошибка: ", error);
+        }
+    });
 });
 
 reg.addEventListener('click', function () {
