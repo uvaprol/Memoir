@@ -1,65 +1,42 @@
 from flask import Flask, render_template, request, jsonify
 import json
 from seting import *
+from datetime import date
 
-def load_DB():
-    with open('DATABASE/DB.json', 'r') as json_file:
-        data = json.load(json_file)
-    return data
-
-
-def get_users():
-    with open('DATABASE/USERS.json', 'r') as json_file:
-        data = json.load(json_file)
-    return data
-
+def get_memoirs(name: str, year: str = date.today().year, month: str = date.today().month, memoirs: dict = {}) -> dict:
+    connection = sqlite3.connect(DB_CONNECT)
+    cursor = connection.cursor()
+    cursor.execute(f'SELECT {ROWS[1][3]}, {ROWS[1][4]}, {ROWS[1][5]} FROM {TABLES[1]} WHERE {ROWS[1][0]} == "{name}" AND {ROWS[1][1]} == "{year} AND {ROWS[1][2]} == "{month}" ORDER BY {ROWS[1][3]} ASC, {ROWS[1][4]} ASC;')
+    data = cursor.fetchall()
+    connection.close()
+    for d in data:
+        if memoirs.get(d[0]) == None:
+            memoirs[d[0]] = {}
+        else:
+            memoirs[d[0]].update({d[1]: d[2]})
+    return memoirs
+def get_reg_data(name: str) -> list:
+    connection = sqlite3.connect(DB_CONNECT)
+    cursor = connection.cursor()
+    cursor.execute(f'SELECT * FROM {TABLES[0]} WHERE {ROWS[0][0]} == "{name}"')
+    user = cursor.fetchall()
+    connection.close()
+    return user
 
 DEV_MODE = False
 app = Flask(__name__)
 
-@app.route('/memoir')
-def main_render():
-    return render_template('index.html', months=MONTHS)
+def main_render(name):
+    return render_template('index.html', months=MONTHS, week_days=WEEK_DAYS, user=name, memoirs=get_memoirs(name))
 
-@app.route('/')
+@app.route('/', methods = ['POST', 'GET'])
 def enter_render():
+    if request.method == 'POST':
+        login = request.form.get('Login')
+        password = request.form.get('Password')
+        user = get_reg_data(login)[0]
+        if user[2] == password:
+            return main_render(login)
     return render_template('enterance.html')
-
-@app.route('/enter', methods = ['POST'])
-def user_check():
-    login = request.form.get('login')
-    password = request.form.get('password')
-    user = get_reg_data(login)[0]
-    if user[2] == password:
-        return 'true', 200
-    return 'false', 400
-
-# @app.route('/send_data_users', methods = ['POST'])
-# def send_data():
-#     data = request.json
-#     if not data:
-#         return jsonify({'error': 'No data provided'}), 400
-#     if data.get('password') == API_PASSWORD:
-#         response = {
-#             'message': 'Data received successfully',
-#             'L_data': get_logins(),
-#             'U_data': get_users(),
-#         }
-#         return jsonify(response), 200
-#     return 'Data received successfully', 400
-#
-# @app.route('/save_data_users', methods = ['POST'])
-# def save_DATABASE():
-#     data = request.json
-#     U_data = data.get('U_data')
-#     L_data = data.get('L_data')
-#     if not data:
-#         return jsonify({'error': 'No data provided'}), 400
-#     if data.get('password') == API_PASSWORD:
-#         with open('DATABASE/USERS.json', 'w') as json_file:
-#             json.dump(U_data, json_file)
-#         with open('DATABASE/LOGINS.json', 'w') as json_file:
-#             json.dump(L_data, json_file)
-#     return 'Data received successfully', 200
 
 app.run(host='0.0.0.0', port=80, debug=DEV_MODE)
