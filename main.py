@@ -15,18 +15,19 @@ import sqlite3
 #         else:
 #             memoirs[d[0]].update({d[1]: d[2]})
 #     return memoirs
-def get_reg_data(name: str) -> list:
+def get_reg_data(name: str) -> tuple:
     connection = sqlite3.connect(DB_CONNECT[0])
     cursor = connection.cursor()
     cursor.execute(f'SELECT * FROM {TABLES[0]} WHERE {ROWS[0][0]} == "{name}" LIMIT 1')
-    user = cursor.fetchall()
+    user = cursor.fetchone()
     connection.close()
     return user
 def new_reg(login: str, passwor: str, mail: str) -> bool:
-    if get_reg_data(login) == []:
+    if get_reg_data(login) == None:
+        print(get_reg_data(login))
         connection = sqlite3.connect(DB_CONNECT[0])
         cursor = connection.cursor()
-        cursor.execute(f'INSERT INTO {TABLES[0]} ({ROWS[0][0]}, {ROWS[0][1]}, {ROWS[0][2]}) VALUES ({login}, {passwor}, {mail})')
+        cursor.execute(f'INSERT INTO {TABLES[0]} ({ROWS[0][0]}, {ROWS[0][1]}, {ROWS[0][2]}) VALUES ("{login}", "{passwor}", "{mail}")')
         connection.commit()
         connection.close()
         return True
@@ -35,8 +36,9 @@ def new_reg(login: str, passwor: str, mail: str) -> bool:
 DEV_MODE = False
 app = Flask(__name__)
 
-def main_render(name):
-    return render_template('index.html', months=MONTHS, week_days=WEEK_DAYS, user=name, memoirs=get_memoirs(name))
+@app.route('/memoir', methods = ['POST', 'GET'])
+def main_render():
+    return '<script>alert( localStorage.getItem("login") );</script>' #render_template('index.html', months=MONTHS, week_days=WEEK_DAYS, user=name, memoirs=[])
 
 @app.route('/', methods = ['POST', 'GET'])
 def enter_render():
@@ -44,15 +46,17 @@ def enter_render():
         mode = request.form.get('Mode')
         login = request.form.get('Login')
         password = request.form.get('Password')
-        if mode == 'reg':
-            email = request.form.get('Email')
+        email = request.form.get('Email')
+        if mode == 'true':
             if new_reg(login, password, email):
-                return 200
+                return '', 200
+            else:
+                return 'Логин занят', 400
         else:
-            user = get_reg_data(login)[0]
-            if user[2] == password:
-                return 200
-        return 400
+            user = get_reg_data(login)
+            if user != None and user[1] == password:
+                return '', 200
+            return 'Неверный логин или пароль', 400
     return render_template('enterance.html')
 
 app.run(host='0.0.0.0', port=80, debug=DEV_MODE)

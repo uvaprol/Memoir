@@ -207,7 +207,7 @@ img {
   left: calc((100% - 1440px) / 2);
 }
 
-form {
+section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -218,7 +218,7 @@ form {
   width: 100%;
   max-width: 1440px;
 }
-form input {
+section input {
   width: 265px;
   height: 45px;
   border-radius: 6px;
@@ -232,13 +232,13 @@ form input {
   letter-spacing: 0px;
   text-align: left;
 }
-form a, form p {
+section a, section p {
   text-align: center;
   width: 265px;
   margin-top: 4px;
   text-decoration: none;
 }
-form button {
+section button {
   margin-top: 53px;
   width: 265px;
   height: 35px;
@@ -249,15 +249,15 @@ form button {
   border-radius: 6px;
   padding: 10px 0;
 }
-form label {
+section label {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-form label input {
+section label input {
   display: none;
 }
-form label span {
+section label span {
   margin-top: 4px;
   color: rgb(81, 81, 81);
   font-family: "Exo 2";
@@ -267,18 +267,18 @@ form label span {
   letter-spacing: 0px;
   text-align: left;
 }
-form label input:checked ~ span {
+section label input:checked ~ span {
   background-color: transparent;
 }
-form label span::after {
+section label span::after {
   content: "Зарегистрироваться";
 }
-form label input:checked ~ span::after {
+section label input:checked ~ span::after {
   content: "Войти";
 }
-form label input:checked ~ input {
+section label input:checked ~ input {
   display: block;
 }
-form label input:checked ~ a {
+section label input:checked ~ a {
   display: none;
 }/*# sourceMappingURL=style.css.map */

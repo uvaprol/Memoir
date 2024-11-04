@@ -1,40 +1,33 @@
 const inputs = document.getElementsByTagName('input')
 const login = inputs[0]
 const password = inputs[1]
-
-const a = document.getElementsByTagName('a')
-const reset = a[0]
-const reg = a[1]
+const mode = inputs[2]
+const email = inputs[3]
 
 const btn = document.getElementsByTagName('button')[0]
 
-const regText = reg.getElementsByTagName('p')[0]
-const btnText = btn.getElementsByTagName('h2')[0]
+function make_relocation(){
+    localStorage.setItem('login', $(login).val());
+    localStorage.setItem('password', $(password).val());
+    window.location.replace('/memoir')
+}
 
 btn.addEventListener('click', function () {
     $.ajax({
-        url: '/enter', // URL вашего API
+        url: '/',
         type: 'POST',
         data: {
-            'login': $(login).val(),
-            'password': $(password).val()
+            'Mode': mode.checked,
+            'Login': $(login).val(),
+            'Password': $(password).val(),
+            'Email': $(email).val()
         },
-        success: function(response) {
-             window.location.replace("/memoir");
+        success: () => {
+            make_relocation()
         },
-        error: function(xhr, status, error) {
-            alert('Не верный логин или пароль')
-            console.error("Ошибка: ", error);
+        error: (response) => {
+            alert(response.responseText)
         }
     });
-});
-
-reg.addEventListener('click', function () {
-    window.location.replace("https://t.me/trntrvtr_bot");
-});
-
-reset.addEventListener('click', function(){
-    alert('Ну я хз, начни жизнь с чистого листа!')
-    window.location.replace("https://t.me/trntrvtr_bot");
 });
 
