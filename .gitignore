@@ -1,3 +1,4 @@
 seting.py
 /__pycache__
 *.db
+test_db.py
