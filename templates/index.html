@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/index/style/style.css">
     <title>Memoir</title>
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous">
+    </script>
 </head>
 
 <datalist id="my_values">
@@ -26,10 +31,10 @@
         </section>
     </aside>
     <div></div>
-    <header>
+<header>
         <section>
             <img src="../static/icon/LOGO.svg" alt="logo">
-            <h2>{{ user }}</h2>
+            <h2 id="name"></h2>
             <button><img src="../static/icon/logout.svg" alt="out"></button>
         </section>
         <section>
@@ -50,33 +55,8 @@
                 {% endfor %}
             </ul>
         </section>
-        <section>
+        <section id="table">
             <h2>Выберите событие месяца...</h2>
-            {% for week, days in memoirs.items() %}
-                <table>
-                    <thead>
-                        <td><img src="" alt="love"></td>
-                        <td><h2>День недели</h2></td>
-                        <td><h2>Событие</h2></td>
-                        <td><h2>Ценность</h2></td>
-                    </thead>
-                    <tbody>
-                        {% for day, mem in days.items() %}
-                            <tr>
-                                <td>
-                                    <label>
-                                        <input type="radio" name="{{ week }}">
-                                        <span></span>
-                                    </label>
-                                </td>
-                                <td><h2>{{ day }} {{ week_days[day] }}</h2></th>
-                                <td><textarea name="" id=""> {{ mem }} </textarea></td>
-                                <td><input type="text" name="values" list="my_values" placeholder="Выбрать"></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endfor %}
         </section>
     </main>
     <footer>

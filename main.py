@@ -15,31 +15,64 @@ import sqlite3
 #         else:
 #             memoirs[d[0]].update({d[1]: d[2]})
 #     return memoirs
+def get_calendar(day: int, todate: str = str(date.today()), y: list = []) -> list:
+    md = {1: 31, 2: 28, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
+    ty, tm, td = map(int, todate.split('-'))
+    if (ty % 4 == 0 and ty % 100 != 0) or (ty % 400 == 0):
+        md[2] += 1
+    for m, d in md.items():
+        week = 1
+        for i in range(1, d+1):
+            if day == 8:
+                day = 1
+                week += 1
+            if m == tm and i >= td or m > tm:
+                r = [("uvaprol", ty, m, i, week, day, "")]
+                y += r
+                print(*r)
+            day += 1
+    return y
+def check_user_data(name: str, year: str = date.today().year) -> bool:
+    connection = sqlite3.connect(DB_CONNECT[1])
+    cursor = connection.cursor()
+    cursor.execute(f'SELECT * FROM {TABLES[1][0]} WHERE {ROWS[1][0]} == "{name}" AND {ROWS[1][1]} == "{year}" LIMIT 1')
+    data = cursor.fetchone()
+    connection.close()
+    if data == None:
+        return False
+    return True
 def get_reg_data(name: str) -> tuple:
     connection = sqlite3.connect(DB_CONNECT[0])
     cursor = connection.cursor()
-    cursor.execute(f'SELECT * FROM {TABLES[0]} WHERE {ROWS[0][0]} == "{name}" LIMIT 1')
+    cursor.execute(f'SELECT * FROM {TABLES[0][0]} WHERE {ROWS[0][0]} == "{name}" LIMIT 1')
     user = cursor.fetchone()
     connection.close()
     return user
 def new_reg(login: str, passwor: str, mail: str) -> bool:
     if get_reg_data(login) == None:
-        print(get_reg_data(login))
         connection = sqlite3.connect(DB_CONNECT[0])
         cursor = connection.cursor()
-        cursor.execute(f'INSERT INTO {TABLES[0]} ({ROWS[0][0]}, {ROWS[0][1]}, {ROWS[0][2]}) VALUES ("{login}", "{passwor}", "{mail}")')
+        cursor.execute(f'INSERT INTO {TABLES[0][0]} ({ROWS[0][0]}, {ROWS[0][1]}, {ROWS[0][2]}) VALUES ("{login}", "{passwor}", "{mail}")')
         connection.commit()
         connection.close()
         return True
     return False
 
+def data_rerender():
+    return render_template('index.html', month=MONTHS, week_days=WEEK_DAYS, memoirs={1: {2: 'el'}})
+
 DEV_MODE = False
 app = Flask(__name__)
 
 @app.route('/memoir', methods = ['POST', 'GET'])
-def main_render():
-    return '<script>alert( localStorage.getItem("login") );</script>' #render_template('index.html', months=MONTHS, week_days=WEEK_DAYS, user=name, memoirs=[])
-
+def get_memoir():
+    if request.method == 'POST':
+        login = request.form.get('Login')
+        password = request.form.get('Password')
+        user = get_reg_data(login)
+        if user != None and user[1] == password:
+            return '', 200
+    return render_template('index.html', month=MONTHS, memoirs={})
 @app.route('/', methods = ['POST', 'GET'])
 def enter_render():
     if request.method == 'POST':
