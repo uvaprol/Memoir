@@ -1,21 +1,22 @@
 from flask import Flask, render_template, request, jsonify
-import json
 from seting import *
-from datetime import date
+from datetime import date, datetime
 import sqlite3
-# def get_memoirs(name: str, year: str = date.today().year, month: str = date.today().month, memoirs: dict = {}) -> dict:
-#     connection = sqlite3.connect(DB_CONNECT)
-#     cursor = connection.cursor()
-#     cursor.execute(f'SELECT {ROWS[1][3]}, {ROWS[1][4]}, {ROWS[1][5]} FROM {TABLES[1]} WHERE {ROWS[1][0]} == "{name}" AND {ROWS[1][1]} == "{year} AND {ROWS[1][2]} == "{month}" ORDER BY {ROWS[1][3]} ASC, {ROWS[1][4]} ASC;')
-#     data = cursor.fetchall()
-#     connection.close()
-#     for d in data:
-#         if memoirs.get(d[0]) == None:
-#             memoirs[d[0]] = {}
-#         else:
-#             memoirs[d[0]].update({d[1]: d[2]})
-#     return memoirs
-def get_calendar(day: int, todate: str = str(date.today()), y: list = []) -> list:
+def get_memoirs(name: str, year: str = date.today().year, month: str = date.today().month, memoirs: dict = {}) -> dict:
+    connection = sqlite3.connect(DB_CONNECT[1])
+    cursor = connection.cursor()
+    cursor.execute(f'SELECT {ROWS[1][4]}, {ROWS[1][3]}, {ROWS[1][5]}, {ROWS[1][6]} FROM {TABLES[1][0]} WHERE {ROWS[1][0]} == "{name}" AND {ROWS[1][1]} == {year} AND {ROWS[1][2]} == {month} ORDER BY {ROWS[1][4]} ASC, {ROWS[1][5]} ASC;')
+    data = cursor.fetchall()
+    connection.close()
+    for d in data:
+        if memoirs.get(d[0]) == None:
+            memoirs[d[0]] = {d[1]: (d[2], d[3])}
+        else:
+            memoirs[d[0]].update({d[1]: (d[2], d[3])})
+    return memoirs
+def get_calendar(user: str, day: int = datetime.today().weekday(), todate: str = str(date.today())) -> bool:
+    connection = sqlite3.connect(DB_CONNECT[1])
+    cursor = connection.cursor()
     md = {1: 31, 2: 28, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
     ty, tm, td = map(int, todate.split('-'))
     if (ty % 4 == 0 and ty % 100 != 0) or (ty % 400 == 0):
@@ -27,11 +28,11 @@ def get_calendar(day: int, todate: str = str(date.today()), y: list = []) -> lis
                 day = 1
                 week += 1
             if m == tm and i >= td or m > tm:
-                r = [("uvaprol", ty, m, i, week, day, "")]
-                y += r
-                print(*r)
+                cursor.execute(f'INSERT INTO {TABLES[1][0]} ({ROWS[1][0]}, {ROWS[1][1]}, {ROWS[1][2]}, {ROWS[1][3]}, {ROWS[1][4]}, {ROWS[1][5]}, {ROWS[1][6]}) VALUES ("{user}", {ty}, {m}, {i}, {week}, {day}, "")')
             day += 1
-    return y
+    connection.commit()
+    connection.close()
+    return True
 def check_user_data(name: str, year: str = date.today().year) -> bool:
     connection = sqlite3.connect(DB_CONNECT[1])
     cursor = connection.cursor()
@@ -58,8 +59,6 @@ def new_reg(login: str, passwor: str, mail: str) -> bool:
         return True
     return False
 
-def data_rerender():
-    return render_template('index.html', month=MONTHS, week_days=WEEK_DAYS, memoirs={1: {2: 'el'}})
 
 DEV_MODE = False
 app = Flask(__name__)
@@ -71,8 +70,9 @@ def get_memoir():
         password = request.form.get('Password')
         user = get_reg_data(login)
         if user != None and user[1] == password:
-            return '', 200
-    return render_template('index.html', month=MONTHS, memoirs={})
+            memoirs = get_memoirs(login)
+            return jsonify(memoirs), 200
+    return render_template('index.html', months=MONTHS)
 @app.route('/', methods = ['POST', 'GET'])
 def enter_render():
     if request.method == 'POST':
@@ -82,7 +82,8 @@ def enter_render():
         email = request.form.get('Email')
         if mode == 'true':
             if new_reg(login, password, email):
-                return '', 200
+                if get_calendar(login):
+                    return '', 200
             else:
                 return 'Логин занят', 400
         else:

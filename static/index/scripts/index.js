@@ -38,8 +38,8 @@ function push_data(data){
                         <span></span>
                     </label>
                 </td>
-                <td><h2>${day} ${WEEK_DAYS[day]}</h2></th>
-                <td><textarea name="" id=""> ${data[week][day]} </textarea></td>
+                <td><h2>${day} ${WEEK_DAYS[data[week][day][0]]}</h2></th>
+                <td><textarea name="" id=""> ${data[week][day][1]} </textarea></td>
                 <td><input type="text" name="values" list="my_values" placeholder="Выбрать"></td>
             </tr>`
         }
@@ -47,6 +47,7 @@ function push_data(data){
         </table>`
     }
     table_space.innerHTML += block
+    areaAutoResize()
 }
 
 function get_data(){
@@ -58,6 +59,7 @@ function get_data(){
             'Password': localStorage.getItem('password'),
         },
         success: (data) => {
+            console.log(data)
             push_data(data)
         },
         error: (response) => {
@@ -84,7 +86,6 @@ function areaAutoResize(){
 
 
 window.onload = () => {
-    areaAutoResize()
     if(localStorage.getItem('login') === null){
         window.location.replace("/")
     } else {
