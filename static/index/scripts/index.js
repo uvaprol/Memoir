@@ -1,23 +1,5 @@
-const WEEK_DAYS = {'1': 'Понедельник', '2': 'Вторник', '3': 'Среда', '4': 'Четверг', '5': 'Пятница', '6': 'Суббота', '7': 'Воскресенье'}
+const WEEK_DAYS = {'1': 'ПН', '2': 'ВТ', '3': 'СР', '4': 'ЧТ', '5': 'ПТ', '6': 'СБ', '7': 'ВС'}
 const table_space = document.getElementById('table')
-//function box_checked(id){
-//    const input = document.getElementById(id)
-//    const inputs = document.getElementsByName('myRadio')
-//    const spans = document.getElementsByTagName('span')
-//    const span = document.getElementById('s_'+id)
-//    event.preventDefault()
-//    if (input.checked == false){
-//        for (let i = 0; i < inputs.length; i++){
-//            inputs[i].checked = false
-//            spans[i].style.width = '0px'
-//            spans[i].style.height = '0px'
-//        }
-//        input.checked = true
-//        span.style.width = '12px'
-//        span.style.height = '12px'
-//    }
-//
-//}
 
 function push_data(data){
     let block = ''
@@ -25,7 +7,7 @@ function push_data(data){
         block += `<table>
         <thead>
             <td><img src="" alt="love"></td>
-            <td><h2>День недели</h2></td>
+            <td><h2>День</h2></td>
             <td><h2>Событие</h2></td>
             <td><h2>Ценность</h2></td>
         </thead>

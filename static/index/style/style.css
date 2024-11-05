@@ -255,9 +255,6 @@ table td:first-child {
   width: 27px;
   border-radius: 6px 0 0 6px;
 }
-table td:nth-child(2) {
-  width: 215px;
-}
 table td:nth-child(3) {
   width: 715px;
   vertical-align: middle;
