@@ -5,7 +5,7 @@ import sqlite3
 def get_memoirs(name: str, year: str = date.today().year, month: str = date.today().month, memoirs: dict = {}) -> dict:
     connection = sqlite3.connect(DB_CONNECT[1])
     cursor = connection.cursor()
-    cursor.execute(f'SELECT {ROWS[1][4]}, {ROWS[1][3]}, {ROWS[1][5]}, {ROWS[1][6]} FROM {TABLES[1][0]} WHERE {ROWS[1][0]} == "{name}" AND {ROWS[1][1]} == {year} AND {ROWS[1][2]} == {month} ORDER BY {ROWS[1][4]} ASC, {ROWS[1][5]} ASC;')
+    cursor.execute(f'SELECT {ROWS[1][4]}, {ROWS[1][3]}, {ROWS[1][5]}, {ROWS[1][6]} FROM {TABLES[1]} WHERE {ROWS[1][0]} = "{name}" AND {ROWS[1][1]} = {year} AND {ROWS[1][2]} = {month} ORDER BY {ROWS[1][4]} ASC, {ROWS[1][5]} ASC;')
     data = cursor.fetchall()
     connection.close()
     for d in data:
@@ -28,7 +28,7 @@ def get_calendar(user: str, day: int = datetime.today().weekday(), todate: str =
                 day = 1
                 week += 1
             if m == tm and i >= td or m > tm:
-                cursor.execute(f'INSERT INTO {TABLES[1][0]} ({ROWS[1][0]}, {ROWS[1][1]}, {ROWS[1][2]}, {ROWS[1][3]}, {ROWS[1][4]}, {ROWS[1][5]}, {ROWS[1][6]}) VALUES ("{user}", {ty}, {m}, {i}, {week}, {day}, "")')
+                cursor.execute(f'INSERT INTO {TABLES[1]} ({ROWS[1][0]}, {ROWS[1][1]}, {ROWS[1][2]}, {ROWS[1][3]}, {ROWS[1][4]}, {ROWS[1][5]}, {ROWS[1][6]}) VALUES ("{user}", {ty}, {m}, {i}, {week}, {day}, "")')
             day += 1
     connection.commit()
     connection.close()
@@ -36,7 +36,7 @@ def get_calendar(user: str, day: int = datetime.today().weekday(), todate: str =
 def check_user_data(name: str, year: str = date.today().year) -> bool:
     connection = sqlite3.connect(DB_CONNECT[1])
     cursor = connection.cursor()
-    cursor.execute(f'SELECT * FROM {TABLES[1][0]} WHERE {ROWS[1][0]} == "{name}" AND {ROWS[1][1]} == "{year}" LIMIT 1')
+    cursor.execute(f'SELECT * FROM {TABLES[1]} WHERE {ROWS[1][0]} = "{name}" AND {ROWS[1][1]} = "{year}" LIMIT 1')
     data = cursor.fetchone()
     connection.close()
     if data == None:
@@ -45,7 +45,7 @@ def check_user_data(name: str, year: str = date.today().year) -> bool:
 def get_reg_data(name: str) -> tuple:
     connection = sqlite3.connect(DB_CONNECT[0])
     cursor = connection.cursor()
-    cursor.execute(f'SELECT * FROM {TABLES[0][0]} WHERE {ROWS[0][0]} == "{name}" LIMIT 1')
+    cursor.execute(f'SELECT * FROM {TABLES[0]} WHERE {ROWS[0][0]} = "{name}" LIMIT 1')
     user = cursor.fetchone()
     connection.close()
     return user
@@ -53,17 +53,67 @@ def new_reg(login: str, passwor: str, mail: str) -> bool:
     if get_reg_data(login) == None:
         connection = sqlite3.connect(DB_CONNECT[0])
         cursor = connection.cursor()
-        cursor.execute(f'INSERT INTO {TABLES[0][0]} ({ROWS[0][0]}, {ROWS[0][1]}, {ROWS[0][2]}) VALUES ("{login}", "{passwor}", "{mail}")')
+        cursor.execute(f'INSERT INTO {TABLES[0]} ({ROWS[0][0]}, {ROWS[0][1]}, {ROWS[0][2]}) VALUES ("{login}", "{passwor}", "{mail}")')
         connection.commit()
         connection.close()
         return True
     return False
+def update_BD_data(login: str, day: tuple, text: str) -> bool:
+    try:
+        connection = sqlite3.connect(DB_CONNECT[1])
+        cursor = connection.cursor()
+        cursor.execute(
+            f'UPDATE {TABLES[1]} '
+            f'SET {ROWS[1][6]} = "{text}" '
+            f'WHERE {ROWS[1][0]} = "{login}" '
+            f'AND {ROWS[1][1]} = "{day[0]}" '
+            f'AND {ROWS[1][2]} = "{day[1]}" '
+            f'AND {ROWS[1][3]} = "{day[2]}" '
+        )
+        connection.commit()
+        connection.close()
+        return True
+    except:
+        return False
+
+def return_memory(login: str, day: tuple) -> str:
+    connection = sqlite3.connect(DB_CONNECT[1])
+    cursor = connection.cursor()
+    cursor.execute(
+        f'SELECT {ROWS[1][6]} FROM {TABLES[1]} '
+        f'WHERE {ROWS[1][0]} == "{login}" '
+        f'AND {ROWS[1][1]} == "{day[0]}" '
+        f'AND {ROWS[1][2]} == "{day[1]}" '
+        f'AND {ROWS[1][3]} == "{day[2]}" '
+        f'LIMIT 1'
+    )
+    memoir = cursor.fetchone()
+    connection.close()
+    return memoir
+
+
 
 
 DEV_MODE = False
 app = Flask(__name__)
 
-@app.route('/memoir', methods = ['POST', 'GET'])
+@app.route('/memoir_save', methods=['POST'])
+def save_memoir():
+    if request.method == 'POST':
+        login = request.form.get('Login')
+        password = request.form.get('Password')
+        memoir = request.form.get('Memoir')
+        day = request.form.get('Date')
+        user = get_reg_data(login)
+        if user != None and user[1] == password:
+            day = day.split('_')
+            print(update_BD_data(login, day, memoir))
+            if update_BD_data(login, day, memoir):
+                return '', 200
+            else:
+                memoir = return_memory(login, day)
+                return 'memoir', 400
+@app.route('/memoir', methods=['POST', 'GET'])
 def get_memoir():
     if request.method == 'POST':
         login = request.form.get('Login')
@@ -73,7 +123,7 @@ def get_memoir():
             memoirs = get_memoirs(login)
             return jsonify(memoirs), 200
     return render_template('index.html', months=MONTHS)
-@app.route('/', methods = ['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET'])
 def enter_render():
     if request.method == 'POST':
         mode = request.form.get('Mode')
