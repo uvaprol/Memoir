@@ -17,14 +17,14 @@ function push_data(data){
             dayINweek[day] = week
             block += `<tr>
                 <td>
-                    <label>
-                        <input type="radio" name="${week}">
+                    <label name="checkBox">
+                        <input type="radio" name="${week}" ${(data[week][day][3] == 1)?'checked':''} id="chk_${2024}_${12}_${day}_${week}">
                         <span></span>
                     </label>
                 </td>
                 <td><h2>${day} ${WEEK_DAYS[data[week][day][0]]}</h2></td>
-                <td><textarea name="${2024}_${11}_${day}" id=""> ${data[week][day][1]} </textarea></td>
-                <td><input type="text" name="values" list="my_values" placeholder="Выбрать"></td>
+                <td><textarea name="" id="txt_${2024}_${12}_${day}"> ${data[week][day][1]} </textarea></td>
+                <td><input type="text" name="val_input" id="val_${2024}_${12}_${day}" list="my_values" placeholder="Выбрать" value="${(data[week][day][2] != null)?data[week][day][2]:''}"></td>
             </tr>`
         }
         block += `</tbody>
@@ -44,7 +44,7 @@ function get_data(){
             'Password': localStorage.getItem('password'),
         },
         success: (data) => {
-            // console.log(data)
+            console.log(data)
             push_data(data)
         },
         error: (response) => {
@@ -55,6 +55,9 @@ function get_data(){
 
 function areaAutoResize(){
     const textarea = document.getElementsByTagName('textarea');
+    const inputs = document.getElementsByName('val_input');
+    const checkBoxes = document.getElementsByName('checkBox');
+    console.log(checkBoxes[0].getElementsByTagName('input')[0])
     for (area of textarea){
         if (area.scrollHeight === 48){
             area.style.height = '24px';
@@ -68,17 +71,17 @@ function areaAutoResize(){
           });
         area.addEventListener('blur', function () {
             this.style.color = 'red'
-            console.log(this.name)
+            console.log(this.id.slice(4))
             $.ajax({
                 url: '/memoir_save',
                 type: 'POST',
                 data: {
                     'Login': localStorage.getItem('login'),
                     'Password': localStorage.getItem('password'),
+                    'Date': this.id.slice(4),
                     'Memoir': this.value,
-                    'Date': this.name,
                 },
-                success: (data) => {
+                success: () => {
                     this.style.color = 'black'
                 },
                 error: (response) => {
@@ -87,11 +90,55 @@ function areaAutoResize(){
             });
           });
     }
+    for (input of inputs){
+        input.addEventListener('blur', function () {
+            this.style.color = 'red'
+            $.ajax({
+                url: '/value_save',
+                type: 'POST',
+                data: {
+                    'Login': localStorage.getItem('login'),
+                    'Password': localStorage.getItem('password'),
+                    'Date': this.id.slice(4),
+                    'Value': this.value,
+                },
+                success: () => {
+                    this.style.color = 'black'
+                },
+                error: (response) => {
+                    console.log(response.responseText)
+                }
+            });
+        });
+    }
+    for (checkBox of checkBoxes){
+        for (input of checkBox.getElementsByTagName('input')){
+            input.addEventListener('input', function () {
+                $.ajax({
+                    url: '/point_save',
+                    type: 'POST',
+                    data: {
+                        'Login': localStorage.getItem('login'),
+                        'Password': localStorage.getItem('password'),
+                        'Date': this.id.slice(4),
+                        'Value': this.value,
+                    },
+                    success: () => {
+                        console.log('success')
+                    },
+                    error: (response) => {
+                        console.log(response.responseText)
+                    }
+                });
+            })
+        }
+    }
 }
 
 function autoFocus(){
-    let now = new Date();
-    window.location.href = `/memoir#week${dayINweek[now.getDate()]}`;
+    console.log('in development')
+    // let now = new Date();
+    // window.location.href = `/memoir#week${dayINweek[now.getDate()]}`;
 }
 
 window.onload = () => {

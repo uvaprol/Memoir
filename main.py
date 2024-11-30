@@ -5,14 +5,14 @@ import sqlite3
 def get_memoirs(name: str, year: str = date.today().year, month: str = date.today().month, memoirs: dict = {}) -> dict:
     connection = sqlite3.connect(DB_CONNECT[1])
     cursor = connection.cursor()
-    cursor.execute(f'SELECT {ROWS[1][4]}, {ROWS[1][3]}, {ROWS[1][5]}, {ROWS[1][6]} FROM {TABLES[1]} WHERE {ROWS[1][0]} = "{name}" AND {ROWS[1][1]} = {year} AND {ROWS[1][2]} = {month} ORDER BY {ROWS[1][4]} ASC, {ROWS[1][5]} ASC;')
+    cursor.execute(f'SELECT {ROWS[1][4]}, {ROWS[1][3]}, {ROWS[1][5]}, {ROWS[1][6]}, {ROWS[1][7]}, {ROWS[1][8]} FROM {TABLES[1]} WHERE {ROWS[1][0]} = "{name}" AND {ROWS[1][1]} = {year} AND {ROWS[1][2]} = {month} ORDER BY {ROWS[1][4]} ASC, {ROWS[1][5]} ASC;')
     data = cursor.fetchall()
     connection.close()
     for d in data:
         if memoirs.get(d[0]) == None:
             memoirs[d[0]] = {d[1]: (d[2], d[3])}
         else:
-            memoirs[d[0]].update({d[1]: (d[2], d[3])})
+            memoirs[d[0]].update({d[1]: (d[2], d[3], d[4], d[5])})
     return memoirs
 def get_calendar(user: str, day: int = datetime.today().weekday(), todate: str = str(date.today())) -> bool:
     connection = sqlite3.connect(DB_CONNECT[1])
@@ -58,38 +58,81 @@ def new_reg(login: str, passwor: str, mail: str) -> bool:
         connection.close()
         return True
     return False
-def update_BD_data(login: str, day: tuple, text: str) -> bool:
+def update_memory(login: str, day: tuple, text: str) -> bool:
     try:
+        print(day)
         connection = sqlite3.connect(DB_CONNECT[1])
         cursor = connection.cursor()
         cursor.execute(
             f'UPDATE {TABLES[1]} '
-            f'SET {ROWS[1][6]} = "{text}" '
+            f'SET {ROWS[1][6]} = "{text}"'
             f'WHERE {ROWS[1][0]} = "{login}" '
-            f'AND {ROWS[1][1]} = "{day[0]}" '
-            f'AND {ROWS[1][2]} = "{day[1]}" '
-            f'AND {ROWS[1][3]} = "{day[2]}" '
+            f'AND {ROWS[1][1]} = {day[0]} '
+            f'AND {ROWS[1][2]} = {day[1]} '
+            f'AND {ROWS[1][3]} = {day[2]} '
         )
         connection.commit()
         connection.close()
         return True
     except:
         return False
-
-def return_memory(login: str, day: tuple) -> str:
-    connection = sqlite3.connect(DB_CONNECT[1])
-    cursor = connection.cursor()
-    cursor.execute(
-        f'SELECT {ROWS[1][6]} FROM {TABLES[1]} '
-        f'WHERE {ROWS[1][0]} == "{login}" '
-        f'AND {ROWS[1][1]} == "{day[0]}" '
-        f'AND {ROWS[1][2]} == "{day[1]}" '
-        f'AND {ROWS[1][3]} == "{day[2]}" '
-        f'LIMIT 1'
-    )
-    memoir = cursor.fetchone()
-    connection.close()
-    return memoir
+def update_value(login: str, day: tuple, val: str) -> bool:
+    try:
+        connection = sqlite3.connect(DB_CONNECT[1])
+        cursor = connection.cursor()
+        cursor.execute(
+            f'UPDATE {TABLES[1]} '
+            f'SET {ROWS[1][7]} = "{val}"'
+            f'WHERE {ROWS[1][0]} = "{login}" '
+            f'AND {ROWS[1][1]} = {day[0]} '
+            f'AND {ROWS[1][2]} = {day[1]} '
+            f'AND {ROWS[1][3]} = {day[2]} '
+        )
+        connection.commit()
+        connection.close()
+        return True
+    except:
+        return False
+def update_point(login: str, day: tuple, val: bool) -> bool:
+    print(login, day, val)
+    try:
+        connection = sqlite3.connect(DB_CONNECT[1])
+        cursor = connection.cursor()
+        cursor.execute(
+            f'UPDATE {TABLES[1]} '
+            f'SET {ROWS[1][8]} = {not val} '
+            f'WHERE {ROWS[1][0]} = "{login}" '
+            f'AND {ROWS[1][1]} = {day[0]} '
+            f'AND {ROWS[1][2]} = {day[1]} '
+            f'AND {ROWS[1][4]} = {day[3]}'
+        )
+        cursor.execute(
+            f'UPDATE {TABLES[1]} '
+            f'SET {ROWS[1][8]} = {val} '
+            f'WHERE {ROWS[1][0]} = "{login}" '
+            f'AND {ROWS[1][1]} = {day[0]} '
+            f'AND {ROWS[1][2]} = {day[1]} '
+            f'AND {ROWS[1][3]} = {day[2]} '
+        )
+        connection.commit()
+        connection.close()
+        return True
+    except:
+        return False
+# def return_memory(login: str, day: tuple) -> str:
+#     connection = sqlite3.connect(DB_CONNECT[1])
+#     cursor = connection.cursor()
+#     cursor.execute(
+#         f'SELECT {ROWS[1][6]}, {ROWS[1][7]} FROM {TABLES[1]} '
+#         f'WHERE {ROWS[1][0]} == "{login}" '
+#         f'AND {ROWS[1][1]} == "{day[0]}" '
+#         f'AND {ROWS[1][2]} == "{day[1]}" '
+#         f'AND {ROWS[1][3]} == "{day[2]}" '
+#         f'LIMIT 1'
+#     )
+#     memoir = cursor.fetchone()
+#     connection.close()
+#     return memoir
 
 
 
@@ -105,14 +148,46 @@ def save_memoir():
         memoir = request.form.get('Memoir')
         day = request.form.get('Date')
         user = get_reg_data(login)
-        if user != None and user[1] == password:
+        if user != None and user[1] == password and memoir != '':
             day = day.split('_')
-            print(update_BD_data(login, day, memoir))
-            if update_BD_data(login, day, memoir):
+            # print(update_memory(login, day, memoir))
+            if update_memory(login, day, memoir):
                 return '', 200
             else:
-                memoir = return_memory(login, day)
-                return 'memoir', 400
+                # memoir = return_memory(login, day)
+                return '', 400
+@app.route('/value_save', methods=['POST'])
+def save_val():
+    if request.method == 'POST':
+        login = request.form.get('Login')
+        password = request.form.get('Password')
+        val = request.form.get('Value')
+        day = request.form.get('Date')
+        user = get_reg_data(login)
+        if user != None and user[1] == password and val != '':
+            day = day.split('_')
+            # print(update_value(login, day, val))
+            if update_value(login, day, val):
+                return '', 200
+            else:
+                # memoir = return_memory(login, day)
+                return '', 400
+@app.route('/point_save', methods=['POST'])
+def save_point():
+    if request.method == 'POST':
+        login = request.form.get('Login')
+        password = request.form.get('Password')
+        val = True if request.form.get('Value') == 'on' else False
+        day = request.form.get('Date')
+        user = get_reg_data(login)
+        if user != None and user[1] == password:
+            day = day.split('_')
+            # print(update_value(login, day, val))
+            if update_point(login, day, val):
+                return '', 200
+            else:
+                # memoir = return_memory(login, day)
+                return '', 400
 @app.route('/memoir', methods=['POST', 'GET'])
 def get_memoir():
     if request.method == 'POST':
