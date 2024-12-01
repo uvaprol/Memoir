@@ -1,6 +1,14 @@
 const WEEK_DAYS = {'1': 'ПН', '2': 'ВТ', '3': 'СР', '4': 'ЧТ', '5': 'ПТ', '6': 'СБ', '7': 'ВС'}
 const table_space = document.getElementById('table')
 let dayINweek = {}
+const DATE = new Date()
+let YEAR = DATE.getFullYear()
+let MONTH = DATE.getMonth() + 1
+const textarea = document.getElementsByTagName('textarea');
+const inputs = document.getElementsByName('val_input');
+const checkBoxes = document.getElementsByName('checkBox');
+const SET_MONTH = document.getElementsByTagName('li')
+const SET_MONTH_BTN = document.getElementsByTagName('main')[0].getElementsByTagName('button')
 
 function push_data(data){
     let block = ''
@@ -18,13 +26,13 @@ function push_data(data){
             block += `<tr>
                 <td>
                     <label name="checkBox">
-                        <input type="radio" name="${week}" ${(data[week][day][3] == 1)?'checked':''} id="chk_${2024}_${12}_${day}_${week}">
+                        <input type="radio" name="${week}" ${(data[week][day][3] == 1)?'checked':''} id="chk_${YEAR}_${MONTH}_${day}_${week}">
                         <span></span>
                     </label>
                 </td>
                 <td><h2>${day} ${WEEK_DAYS[data[week][day][0]]}</h2></td>
-                <td><textarea name="" id="txt_${2024}_${12}_${day}"> ${data[week][day][1]} </textarea></td>
-                <td><input type="text" name="val_input" id="val_${2024}_${12}_${day}" list="my_values" placeholder="Выбрать" value="${(data[week][day][2] != null)?data[week][day][2]:''}"></td>
+                <td><textarea name="" id="txt_${YEAR}_${MONTH}_${day}"> ${data[week][day][1]} </textarea></td>
+                <td><input type="text" name="val_input" id="val_${YEAR}_${MONTH}_${day}" list="my_values" placeholder="Выбрать" value="${(data[week][day][2] != null)?data[week][day][2]:''}"></td>
             </tr>`
         }
         block += `</tbody>
@@ -32,7 +40,7 @@ function push_data(data){
     }
     table_space.innerHTML += block
     areaAutoResize()
-    autoFocus()
+    // autoFocus()
 }
 
 function get_data(){
@@ -54,10 +62,6 @@ function get_data(){
 }
 
 function areaAutoResize(){
-    const textarea = document.getElementsByTagName('textarea');
-    const inputs = document.getElementsByName('val_input');
-    const checkBoxes = document.getElementsByName('checkBox');
-    console.log(checkBoxes[0].getElementsByTagName('input')[0])
     for (area of textarea){
         if (area.scrollHeight === 48){
             area.style.height = '24px';
@@ -135,6 +139,20 @@ function areaAutoResize(){
     }
 }
 
+function set_nav(){
+    for (m of SET_MONTH){
+        m.addEventListener('click', function () {
+            console.log(this.id)
+        })
+    }
+    for (btn of SET_MONTH_BTN){
+        btn.addEventListener('click', function () {
+            YEAR = eval(`${YEAR} ${this.name} 1`)
+            console.log(YEAR)
+        })
+    }
+}
+
 function autoFocus(){
     console.log('in development')
     // let now = new Date();
@@ -145,6 +163,7 @@ window.onload = () => {
     if(localStorage.getItem('login') === null){
         window.location.replace("/")
     } else {
+        set_nav()
         get_data()
     }
 }

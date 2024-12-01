@@ -31,7 +31,7 @@
         </section>
     </aside>
     <div></div>
-<header>
+    <header>
         <section>
             <img src="../static/icon/LOGO.svg" alt="logo">
             <h2 id="name"></h2>
@@ -45,13 +45,13 @@
     <main>
         <section>
             <nav>
-                <button><img src="../static/icon/arrow.svg" alt="<"></button>
+                <button name="-"><img src="../static/icon/arrow.svg" alt="<"></button>
                 <h2>2024</h2>
-                <button><img src="../static/icon/arrow.svg" alt=">"></button>
+                <button name="+"><img src="../static/icon/arrow.svg" alt=">"></button>
             </nav>
             <ul>
                 {% for month in months %}
-                    <li><h2>{{ month }}</h2><figure></figure></li>
+                    <li id="{{ month }}"><h2>{{ month }}</h2><figure></figure></li>
                 {% endfor %}
             </ul>
         </section>

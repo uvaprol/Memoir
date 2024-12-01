@@ -324,6 +324,7 @@ table tbody tr td textarea {
   line-height: 22px;
   letter-spacing: 0px;
   min-height: 22px;
+  text-indent: 0px;
 }
 table tbody tr td textarea::-webkit-scrollbar {
   display: none;
