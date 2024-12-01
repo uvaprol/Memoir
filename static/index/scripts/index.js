@@ -8,7 +8,9 @@ const textarea = document.getElementsByTagName('textarea');
 const inputs = document.getElementsByName('val_input');
 const checkBoxes = document.getElementsByName('checkBox');
 const SET_MONTH = document.getElementsByTagName('li')
-const SET_MONTH_BTN = document.getElementsByTagName('main')[0].getElementsByTagName('button')
+const MAIN = document.getElementsByTagName('main')[0]
+const SET_MONTH_BTN = MAIN.getElementsByTagName('button')
+const SET_YEAR = MAIN.getElementsByTagName('h2')[0]
 
 function push_data(data){
     let block = ''
@@ -148,7 +150,7 @@ function set_nav(){
     for (btn of SET_MONTH_BTN){
         btn.addEventListener('click', function () {
             YEAR = eval(`${YEAR} ${this.name} 1`)
-            console.log(YEAR)
+            SET_YEAR.textContent = YEAR
         })
     }
 }
