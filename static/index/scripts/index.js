@@ -52,6 +52,8 @@ function get_data(){
         data: {
             'Login': localStorage.getItem('login'),
             'Password': localStorage.getItem('password'),
+            'Year': YEAR,
+            'Month': MONTH,
         },
         success: (data) => {
             console.log(data)
