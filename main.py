@@ -24,12 +24,18 @@ def get_memoirs(name: str, year: str = date.today().year, month: str = date.toda
     )
     data = cursor.fetchall()
     connection.close()
-    for d in data:
-        if memoirs.get(d[0]) == None:
-            memoirs[d[0]] = {d[1]: (d[2], d[3])}
-        else:
-            memoirs[d[0]].update({d[1]: (d[2], d[3], d[4], d[5])})
+    if data:
+        for d in data:
+            if memoirs.get(d[0]) == None:
+                memoirs[d[0]] = {d[1]: (d[2], d[3])}
+            else:
+                memoirs[d[0]].update({d[1]: (d[2], d[3], d[4], d[5])})
+    else:
+        # get_calendar()
+        # get_memoirs()
+        pass
     return memoirs
+
 def get_calendar(user: str, day: int = datetime.today().weekday(), todate: str = str(date.today())) -> bool:
     connection = sqlite3.connect(DB_CONNECT[1])
     cursor = connection.cursor()
@@ -40,8 +46,8 @@ def get_calendar(user: str, day: int = datetime.today().weekday(), todate: str =
     for m, d in md.items():
         week = 1
         for i in range(1, d+1):
-            if day == 8:
-                day = 1
+            if day == 7:
+                day = 0
                 week += 1
             if m == tm and i >= td or m > tm:
                 cursor.execute(
