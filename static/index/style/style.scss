@@ -202,20 +202,34 @@ main{
             li{
                 cursor: pointer;
                 padding: 0 22px;
-                display: flex;
                 align-items: center;
-                justify-content: space-between;
                 figure{
-                    border-radius: 50%;
-                    width: 8px;
-                    height: 8px;
-                    background-color: $ghost-red;
-                    opacity: 0;
-                }
+                        border-radius: 50%;
+                        width: 8px;
+                        height: 8px;
+                        background-color: $ghost-red;
+                        opacity: 0;
+                    }
+                
+                // display: flex;
+                // input{
+                //     display: none;
+                // }
+                // h2{
+                //     cursor: pointer;
+                //     padding: 0 22px;
+                //     width: calc(180px - 44px);
+                // }
+                // h2:hover{
+                //     background-color: $soft-green;
+                // }
+                // input:checked ~ h2{
+                //     background-color: $soft-green;
+                // }
             }
             li:hover{
-                background-color: $soft-green;
-            }
+                    background-color: $soft-green;
+                }
         }
     }
     section:last-child{

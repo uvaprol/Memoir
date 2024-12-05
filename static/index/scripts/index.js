@@ -1,4 +1,5 @@
-const WEEK_DAYS = {'1': 'ПН', '2': 'ВТ', '3': 'СР', '4': 'ЧТ', '5': 'ПТ', '6': 'СБ', '7': 'ВС'}
+const WEEK_DAYS = {'0': 'ПН', '1': 'ВТ', '2': 'СР', '3': 'ЧТ', '4': 'ПТ', '5': 'СБ', '6': 'ВС'}
+const MONTH_NUMBER = {'Январь': '1', 'Февраль': '2', 'Март': '3', 'Апрель': '4', 'Май': '5', 'Июнь': '6', 'Июль': '7', 'Август': '8', 'Сентябрь': '9', 'Октябрь': '10', 'Ноябрь': '11', 'Декабрь': '12'}
 const table_space = document.getElementById('table')
 let dayINweek = {}
 const DATE = new Date()
@@ -11,9 +12,9 @@ const SET_MONTH = document.getElementsByTagName('li')
 const MAIN = document.getElementsByTagName('main')[0]
 const SET_MONTH_BTN = MAIN.getElementsByTagName('button')
 const SET_YEAR = MAIN.getElementsByTagName('h2')[0]
-
+let A, B
 function push_data(data){
-    let block = ''
+    let block = '<h2>Выберите событие месяца...</h2>'
     for (let week in data){
         block += `<table id="week${week}">
         <thead>
@@ -40,7 +41,7 @@ function push_data(data){
         block += `</tbody>
         </table>`
     }
-    table_space.innerHTML += block
+    table_space.innerHTML = block
     areaAutoResize()
     // autoFocus()
 }
@@ -57,10 +58,14 @@ function get_data(){
         },
         success: (data) => {
             console.log(data)
+            A.style.backgroundColor = 'rgb(233, 237, 201)'
+            A = B
+            B.style.backgroundColor = 'rgb(204, 213, 174)'
             push_data(data)
         },
         error: (response) => {
-            alert(response.responseText)
+            B = A
+            alert(JSON.parse(response.responseText))
         }
     });
 }
@@ -142,11 +147,17 @@ function areaAutoResize(){
         }
     }
 }
-
 function set_nav(){
     for (m of SET_MONTH){
+        if (MONTH == MONTH_NUMBER[m.id]){
+            A = m
+            B = m
+        }
         m.addEventListener('click', function () {
-            console.log(this.id)
+            MONTH = MONTH_NUMBER[this.id]
+            A = B
+            B = this
+            get_data()
         })
     }
     for (btn of SET_MONTH_BTN){

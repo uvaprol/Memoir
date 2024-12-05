@@ -51,12 +51,18 @@
             </nav>
             <ul>
                 {% for month in months %}
-                    <li id="{{ month }}"><h2>{{ month }}</h2><figure></figure></li>
+                    <li id="{{ month }}"">
+                        <h2>{{ month }}</h2>
+                        <!-- <label name="checkBox">
+                            <input type="radio" name="months" id="{{ month }}">
+                        </label> -->
+                    </li>
+                    <!-- <li id="{{ month }}"><h2>{{ month }}</h2><figure></figure></li> -->
                 {% endfor %}
             </ul>
         </section>
         <section id="table">
-            <h2>Выберите событие месяца...</h2>
+
         </section>
     </main>
     <footer>
