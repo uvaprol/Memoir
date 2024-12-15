@@ -29,7 +29,7 @@ def get_memoirs(name: str, year: int = date.today().year, month: int = date.toda
     if data:
         for d in data:
             if memoirs.get(d[0]) == None:
-                memoirs[d[0]] = {d[1]: (d[2], d[3])}
+                memoirs[d[0]] = {d[1]: (d[2], d[3], d[4], d[5])}
             else:
                 memoirs[d[0]].update({d[1]: (d[2], d[3], d[4], d[5])})
     elif month != date.today().month:
@@ -39,6 +39,7 @@ def get_memoirs(name: str, year: int = date.today().year, month: int = date.toda
         get_memoirs(name=name, key=False)
     else:
         return {'STATE': 400, 'MESSAGE': 'Ошибка загрузки\nСвяжитесь с тех.поддержкой'}
+    print(memoirs)
     return {'STATE': 200,'MESSAGE': memoirs}
 
 def get_calendar(user: str, day: int = datetime.today().weekday(), todate: str = str(date.today())) -> bool:
